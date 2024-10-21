@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale= 1"/>
+<title>joe</title>
+
+<style type="text/css">
+body{text-align:center; 
+     align-items:center;
+     justify-content:center;
+     padding:12px;
+     width:360px;}
+button{width:100px;
+      height:60px;
+      background-color:blue;}
+</style>
+</head>
+<body>
+<h2>score</h2>
+<h3 id="score"></h3>
+<canvas id="board" ></canvas>
+<button onclick="left()" >⬅️</button>
+<button onclick="up() " >⬆️</button>
+<button onclick="right()">➡️</button> 
+<button onclick="down()">⬇️</button>
+
+
+<script type="text/javascript" >
+const score = document.getElementById("score");
+score.value = 1;
+var blocksize= 25;
+var rows = 13;
+var col = 13;
+var board;
+var context;
+
+var snakex = blocksize * 5;
+var snakey = blocksize * 5;
+
+var foodx;
+var foody;
+
+var velocityx =0;
+var velocityy = 0;
+
+var snakebody = [];
+
+window.onload=function() {
+board = document.getElementById("board") ;
+board.height = rows * blocksize;
+board.width = col * blocksize;
+context = board.getContext("2d");
+
+placefood();
+
+setInterval(update, 3000/10)
+if(score.value == 20) {setInterval(update, 1000/10);}}
+
+function update(){ context.fillStyle="black" ;
+        context.fillRect(0, 0, board.width, board.height) ;
+
+context.fillStyle="aqua" ;
+context.fillRect(foodx, foody, blocksize, blocksize);
+if(snakex == foodx && snakey == foody) {snakebody.push([foodx, foody]); 
+placefood(); 
+score.innerHTML = score.value++;}
+if(score.value == 51){document.getElementById("score").style.color="navy" ; }
+
+if(snakebody.length) {snakebody[0] = snakebody[snakex, snakey];}
+
+for(let i = snakebody.length -1; i > 0; i--) {snakebody[i] = snakebody[i-1];}
+
+if(snakex < 0 || snakex > rows * blocksize || snakey < 0 || snakey > col * blocksize) { return 0;}
+
+context.fillStyle="lime" ;
+snakex += velocityx * blocksize ;
+snakey += velocityy * blocksize ;
+context.fillRect(snakex, snakey, blocksize, blocksize);
+
+for(let i = 0; i < snakebody.length; i++){
+context.fillRect(snakebody[i][0], snakebody[i][1], blocksize, blocksize); }
+
+} 
+
+function up() {velocityx=0 ; 
+velocityy =-1;}
+function down() {velocityx=0 ; 
+velocityy =1 ;}
+function right() {velocityx=1 ; 
+velocityy =0 ;}
+function left() {velocityx=-1 ; 
+velocityy =0 ;}
+
+
+
+function placefood() {
+foodx = Math.floor(Math.random() * col) * blocksize ;
+foody = Math.floor(Math.random() * rows) * blocksize;}
+
+</script>
